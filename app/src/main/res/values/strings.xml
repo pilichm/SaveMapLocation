@@ -4,4 +4,9 @@
     <string name="longitude">Longitude: </string>
     <string name="latitude">Latitude: </string>
     <string name="title_activity_location_map">Map</string>
+    
+    <string name="alert_dialog_message">Do you want to save selected location?</string>
+    <string name="alert_dialog_yes">Yes</string>
+    <string name="alert_dialog_no">No</string>
+    <string name="alert_dialog_save">Save?</string>
 </resources>
