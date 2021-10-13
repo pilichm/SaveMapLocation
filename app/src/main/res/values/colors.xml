@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- App colors -->
+    <color name="location_item_background_color_start">#003b6f</color>
+    <color name="location_item_background_color_end">#2596be</color>
+    <color name="location_item_text_color">#FFFFFFFF</color>
+    <color name="activity_main_background_color">#a3d4ff</color>
+    <color name="fab_color">#8b0000</color>
 </resources>

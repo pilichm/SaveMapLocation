@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="location_name_text_size">24sp</dimen>
+    <dimen name="location_lat_long_text_size">16sp</dimen>
+    <dimen name="location_item_default_margin">4dp</dimen>
+    <dimen name="location_item_margin_start">16dp</dimen>
+    <dimen name="fab_default_size">100dp</dimen>
+    <dimen name="fab_default_margin">16dp</dimen>
+</resources>
