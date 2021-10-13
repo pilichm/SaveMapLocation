@@ -1,0 +1,2 @@
+rootProject.name = "SaveMapLocation"
+include ':app'
