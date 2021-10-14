@@ -10,16 +10,16 @@ class Utils {
 
             locations.add(Location(
                 "Warsaw",
-                "Longitude: 11",
-                "Latitude: 12"))
+                "52.22",
+                "21.01"))
             locations.add(Location(
                 "Berlin",
-                "Longitude: 13",
-                "Latitude: 14"))
+                "52.52",
+                "13.41"))
             locations.add(Location(
                 "Paris",
-                "Longitude: 15",
-                "Latitude: 16"))
+                "48.85",
+                "2.34"))
 
             return locations
         }

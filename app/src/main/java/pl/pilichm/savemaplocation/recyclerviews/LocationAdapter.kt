@@ -32,8 +32,10 @@ class LocationAdapter (
 
         if (holder is LocationViewHolder){
             holder.itemView.tvLocationItemName.text = location.locationName
-            holder.itemView.tvLongitude.text = location.longitude
-            holder.itemView.tvLatitude.text = location.latitude
+            holder.itemView.tvLongitude.text =
+                "${context.resources.getString(R.string.longitude)}${location.longitude}"
+            holder.itemView.tvLatitude.text =
+                "${context.resources.getString(R.string.latitude)}${location.latitude}"
             holder.itemView.setOnClickListener {
                 if (onClickListener!=null){
                     onClickListener!!.onClick(position, location)

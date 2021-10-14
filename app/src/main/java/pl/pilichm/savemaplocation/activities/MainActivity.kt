@@ -1,5 +1,6 @@
 package pl.pilichm.savemaplocation.activities
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import pl.pilichm.savemaplocation.R
 import pl.pilichm.savemaplocation.models.Location
 import pl.pilichm.savemaplocation.recyclerviews.LocationAdapter
+import pl.pilichm.savemaplocation.util.Constants
 import pl.pilichm.savemaplocation.util.SwipeToDeleteCallback
 import pl.pilichm.savemaplocation.util.Utils
 
@@ -41,7 +43,11 @@ class MainActivity : AppCompatActivity() {
         mLocationAdapter!!.setOnClickListener(object : LocationAdapter.OnClickListener {
             override fun onClick(position: Int, item: Location){
                 val intent = Intent(applicationContext, LocationMapActivity::class.java)
-                startActivity(intent)
+                val location = mLocations[position]
+                intent.putExtra(Constants.KEY_LATITUDE, location.latitude)
+                intent.putExtra(Constants.KEY_LONGITUDE, location.longitude)
+                intent.putExtra(Constants.KEY_LOCATION, location.locationName)
+                startActivityForResult(intent, Constants.SECOND_ACTIVITY_ID)
             }
         })
         rvLocations.adapter = mLocationAdapter
@@ -66,7 +72,26 @@ class MainActivity : AppCompatActivity() {
          * */
         fabAddLocation.setOnClickListener {
             val intent = Intent(applicationContext, LocationMapActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, Constants.SECOND_ACTIVITY_ID)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode==Constants.SECOND_ACTIVITY_ID){
+            if (resultCode==Activity.RESULT_OK) {
+                if (data != null && data.hasExtra(Constants.KEY_LOCATION)) {
+                    val locationName = data.getStringExtra(Constants.KEY_LOCATION)
+                    val long = data.getStringExtra(Constants.KEY_LONGITUDE)
+                    val lat = data.getStringExtra(Constants.KEY_LATITUDE)
+
+                    if (locationName != null && long != null && lat != null) {
+                        mLocations.add(Location(locationName, long, lat))
+                        mLocationAdapter?.notifyDataSetChanged()
+                    }
+                }
+            }
         }
     }
 }
