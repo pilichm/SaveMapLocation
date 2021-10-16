@@ -1,6 +1,9 @@
 package pl.pilichm.savemaplocation.util
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import pl.pilichm.savemaplocation.models.Location
+import pl.pilichm.savemaplocation.util.Constants.Companion.EMPTY_LOCATION_DATA
 
 
 class Utils {
@@ -22,6 +25,11 @@ class Utils {
                 "2.34"))
 
             return locations
+        }
+
+        fun getEmptyLocationString(): String {
+            val location = Location(EMPTY_LOCATION_DATA, EMPTY_LOCATION_DATA, EMPTY_LOCATION_DATA)
+            return Json.encodeToString(location)
         }
     }
 }

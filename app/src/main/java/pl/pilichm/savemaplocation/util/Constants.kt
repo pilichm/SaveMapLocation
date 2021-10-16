@@ -9,5 +9,6 @@ class Constants {
         const val KEY_LATITUDE = "LATITUDE"
         const val KEY_LOCATION = "LOCATION"
         const val SECOND_ACTIVITY_ID = 1
+        const val EMPTY_LOCATION_DATA = "_"
     }
 }

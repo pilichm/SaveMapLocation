@@ -1,17 +1,22 @@
 package pl.pilichm.savemaplocation.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import pl.pilichm.savemaplocation.R
 import pl.pilichm.savemaplocation.models.Location
 import pl.pilichm.savemaplocation.recyclerviews.LocationAdapter
 import pl.pilichm.savemaplocation.util.Constants
+import pl.pilichm.savemaplocation.util.Constants.Companion.EMPTY_LOCATION_DATA
 import pl.pilichm.savemaplocation.util.SwipeToDeleteCallback
 import pl.pilichm.savemaplocation.util.Utils
 
@@ -34,7 +39,29 @@ class MainActivity : AppCompatActivity() {
      * Listener to floating action button for opening map activity.
      * */
     private fun setUpUIAndListeners(){
-        mLocations = Utils.getMockLocationData()
+        /**
+         * Check if shared preferences contain saved locations data. If no, then use mock values.
+         * */
+        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
+        if (sharedPreferences.contains(SHARED_PREFERENCES_DATA_KEY)) {
+            val locationsCount = sharedPreferences.getInt(SHARED_PREFERENCES_DATA_KEY, 0)
+            if (locationsCount==0){
+                mLocations = Utils.getMockLocationData()
+            } else {
+                mLocations = ArrayList()
+                for (num in 0..locationsCount){
+                    val locationId = "$SHARED_PREFERENCES_DATA_KEY $num"
+                    val data = sharedPreferences.getString(locationId, Utils.getEmptyLocationString())
+                    val location = Json.decodeFromString<Location>(data!!)
+                    if (location.locationName!=EMPTY_LOCATION_DATA) {
+                        mLocations.add(location)
+                    }
+                }
+            }
+        } else {
+            mLocations = Utils.getMockLocationData()
+        }
+
         mLocationAdapter = LocationAdapter(applicationContext, mLocations)
 
         /**
@@ -93,5 +120,35 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    /**
+     * Save locations when app stops.
+     * */
+    override fun onStop() {
+        super.onStop()
+        val locationsCount = mLocations.size
+        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        editor.clear()
+        editor.putInt(SHARED_PREFERENCES_DATA_KEY, locationsCount)
+        for (num in 0 until locationsCount){
+            val locationStr = Json.encodeToString(mLocations[num])
+            val locationId = "$SHARED_PREFERENCES_DATA_KEY $num"
+            if (mLocations[num].locationName!=EMPTY_LOCATION_DATA){
+                editor.putString(locationId, locationStr)
+            }
+        }
+
+        editor.apply()
+    }
+
+    /**
+     * Constants for saving and reading locations data from shared preferences.
+     * */
+    companion object {
+        const val SHARED_PREFERENCES_KEY = "saved_location_data"
+        const val SHARED_PREFERENCES_DATA_KEY = "saved_locations"
     }
 }
