@@ -14,7 +14,8 @@ Used technologies:
 - shared preferences,
 - location service listeners,
 - checking for and asking for permissions,
-- Google Play services.
+- Google Play services,
+- finding views from layout with view binding.
 
 List of saved locations          |  Saved location | Save location screen
 :-------------------------:|:-------------------------:|:-------------------------:
