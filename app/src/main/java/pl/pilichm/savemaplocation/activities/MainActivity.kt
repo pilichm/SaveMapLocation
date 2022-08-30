@@ -8,11 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.serialization.decodeFromString
+addLocationRequestimport kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import pl.pilichm.savemaplocation.R
+import pl.pilichm.savemaplocation.databinding.ActivityMainBinding
 import pl.pilichm.savemaplocation.models.Location
 import pl.pilichm.savemaplocation.recyclerviews.LocationAdapter
 import pl.pilichm.savemaplocation.util.Constants
@@ -21,12 +21,14 @@ import pl.pilichm.savemaplocation.util.SwipeToDeleteCallback
 import pl.pilichm.savemaplocation.util.Utils
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     private var mLocations: ArrayList<Location> = ArrayList()
     private var mLocationAdapter: LocationAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setUpUIAndListeners()
     }
@@ -77,27 +79,27 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(intent, Constants.SECOND_ACTIVITY_ID)
             }
         })
-        rvLocations.adapter = mLocationAdapter
-        rvLocations.layoutManager = LinearLayoutManager(applicationContext)
+        binding.rvLocations.adapter = mLocationAdapter
+        binding.rvLocations.layoutManager = LinearLayoutManager(applicationContext)
 
         /**
          * Swipe helper for deleting items - on swipe left.
          */
         val deleteSwipeHandler = object: SwipeToDeleteCallback(applicationContext){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = rvLocations.adapter as LocationAdapter
+                val adapter = binding.rvLocations.adapter as LocationAdapter
                 adapter.notifyDeleteItem(
                     this@MainActivity, viewHolder.adapterPosition)
             }
         }
 
         val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
-        deleteItemTouchHelper.attachToRecyclerView(rvLocations)
+        deleteItemTouchHelper.attachToRecyclerView(binding.rvLocations)
 
         /**
          * Start map activity without coordinates.
          * */
-        fabAddLocation.setOnClickListener {
+        binding.fabAddLocation.setOnClickListener {
             val intent = Intent(applicationContext, LocationMapActivity::class.java)
             startActivityForResult(intent, Constants.SECOND_ACTIVITY_ID)
         }
